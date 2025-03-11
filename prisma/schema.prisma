@@ -31,3 +31,39 @@ model Usuario {
 
   @@map("usuarios")
 }
+
+model Produto {
+  id        String  @id @default(uuid())
+  descricao String  @db.VarChar(200)
+  valor     Decimal @db.Decimal(10, 2)
+  estoque   Int     @db.Integer
+  tipo      String  @db.VarChar(100)
+
+  criadoProdutoEm DateTime @default(now()) @map("criado_produto_em")
+  disponivel      Boolean? @default(false)
+
+  @@map("produtos")
+}
+
+model Loja {
+  id           String         @id @default(uuid())
+  cnpj         String         @unique @db.VarChar(14)
+  nome         String         @db.VarChar(100)
+  segmento     segmento_cnpj? @default(alimentacao) // padrão alimentação
+  endereco     String         @db.VarChar(200)
+  telefone     String?        @db.VarChar(20)
+  filiais      Int            @db.Integer
+  dataAbertura DateTime       @default(now()) @map("data_abertura")
+
+  @@map("lojas")
+}
+
+enum segmento_cnpj {
+  alimentacao
+  tecnologia
+  vestuario
+  saude
+  educacao
+  mecanica
+  outros
+}
