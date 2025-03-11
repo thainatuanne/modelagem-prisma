@@ -29,6 +29,8 @@ model Usuario {
   criadoEm     DateTime @default(now()) @map("criadoEm")
   atualizadoEm DateTime @default(now()) @updatedAt
 
+  produtos Produto[] //  um usuário pode ter vários produtos
+
   @@map("usuarios")
 }
 
@@ -42,6 +44,16 @@ model Produto {
   criadoProdutoEm DateTime @default(now()) @map("criado_produto_em")
   disponivel      Boolean? @default(false)
 
+  // cada produto pertence a um usuário
+  usuarioId    String // chave estrangeira do usuário que cadastrou o produto
+  usuario      Usuario    @relation(fields: [usuarioId], references: [id])
+  // cada produto pertence a uma loja
+  lojaId       String // chave estrangeira da loja que vende o produto
+  loja         Loja       @relation(fields: [lojaId], references: [id])
+  // cada produto tem um fornecedor
+  fornecedorId String // chave estrangeira do fornecedor do produto
+  fornecedor   Fornecedor @relation(fields: [fornecedorId], references: [id])
+
   @@map("produtos")
 }
 
@@ -54,6 +66,8 @@ model Loja {
   telefone     String?        @db.VarChar(20)
   filiais      Int            @db.Integer
   dataAbertura DateTime       @default(now()) @map("data_abertura")
+
+  produtos Produto[] // uma loja pode ter vários produtos
 
   @@map("lojas")
 }
@@ -76,6 +90,8 @@ model Fornecedor {
 
   criadoEm     DateTime @default(now()) @map("criado_em")
   atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  produtos Produto[] // um fornecedor pode fornecer vários produtos
 
   @@map("fornecedores")
 }
