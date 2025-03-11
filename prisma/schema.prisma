@@ -4,6 +4,11 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// Atualizar o Client
+// npx prisma generate
+
+// Gerar uma migration
+// npx prisma migrate dev
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +16,18 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id     String  @id @default(uuid())
+  nome   String  @db.VarChar(100)
+  idade  Int     @db.Integer
+  email  String  @unique @db.VarChar(100)
+  senha  String  @db.VarChar(255) // criptografada
+  gitHub String? @db.VarChar(100)
+
+  criadoEm     DateTime @default(now()) @map("criadoEm")
+  atualizadoEm DateTime @default(now()) @updatedAt
+
+  @@map("usuarios")
 }
